@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Internal Server Error (500){% endblock %}
+{% block breadcrumb %}Error 500{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 40px auto; text-align: center; padding: 36px 24px;">
+    <div style="font-size: 3.5rem; font-weight: 800; color: var(--danger-600); margin-bottom: 8px;">
+        500
+    </div>
+    <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--slate-900); margin-bottom: 12px;">
+        Internal Server Error
+    </h2>
+    <p style="font-size: 0.95rem; color: var(--slate-600); margin-bottom: 24px;">
+        An unexpected error occurred while processing your request. The database transaction has been safely rolled back.
+    </p>
+    <div>
+        <a href="{{ url_for('dashboard.index') }}" class="btn btn-primary">
+            Return to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

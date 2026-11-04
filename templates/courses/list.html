@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Course Catalog{% endblock %}
+{% block breadcrumb %}Courses{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2 class="page-title">Online Student Course Registration System</h2>
+        <p class="page-subtitle">Module B (Practical C) — Course Catalog, Dynamic Seat Capacity, and Transactional Enrollment.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('courses.add_course') }}" class="btn btn-outline">
+            <span>+ Add Course</span>
+        </a>
+        <a href="{{ url_for('courses.register') }}" class="btn btn-primary">
+            <span>Register a Student</span>
+        </a>
+    </div>
+</div>
+
+<!-- Search & Filter Bar -->
+<form method="GET" action="{{ url_for('courses.list_courses') }}" class="filter-bar">
+    <div class="search-input-wrapper">
+        <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search by course code, name, or instructor..."
+            value="{{ search_query }}"
+        >
+    </div>
+
+    <div style="min-width: 180px;">
+        <select name="department" class="form-control" onchange="this.form.submit()">
+            <option value="">All Departments</option>
+            {% for dept in departments %}
+                <option value="{{ dept }}" {% if dept_filter == dept %}selected{% endif %}>{{ dept }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div style="min-width: 160px;">
+        <select name="status" class="form-control" onchange="this.form.submit()">
+            <option value="">All Availability</option>
+            <option value="available" {% if status_filter == 'available' %}selected{% endif %}>Seats Available</option>
+            <option value="full" {% if status_filter == 'full' %}selected{% endif %}>Class Full (0 Seats)</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-outline">
+        <span>Filter</span>
+    </button>
+
+    {% if search_query or dept_filter or status_filter %}
+        <a href="{{ url_for('courses.list_courses') }}" class="btn btn-outline" style="color: var(--danger-600);">
+            Clear Filters
+        </a>
+    {% endif %}
+
+    <div style="margin-left: auto; font-size: 0.88rem; color: var(--slate-500);">
+        Showing <strong>{{ total_courses }}</strong> course(s)
+    </div>
+</form>
+
+<!-- Courses Table -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <span>Academic Course Catalog</span>
+        </h3>
+        <a href="{{ url_for('courses.list_registrations') }}" class="btn btn-sm btn-outline">
+            View Enrolled Roster &rarr;
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Course Name</th>
+                    <th>Department</th>
+                    <th>Credits</th>
+                    <th>Instructor</th>
+                    <th>Seat Status</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if courses %}
+                    {% for course in courses %}
+                        <tr>
+                            <td>
+                                <span class="badge badge-blue">{{ course.course_code }}</span>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('courses.view_course', course_id=course.id) }}" style="font-weight: 600;">
+                                    {{ course.course_name }}
+                                </a>
+                                {% if course.description %}
+                                    <div style="font-size: 0.78rem; color: var(--slate-500); max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        {{ course.description }}
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>{{ course.department }}</td>
+                            <td><strong>{{ course.credits }}</strong> cr</td>
+                            <td>{{ course.instructor }}</td>
+                            <td>
+                                {% if course.available_seats <= 0 %}
+                                    <span class="badge badge-danger">Class Full (0/{{ course.max_seats }})</span>
+                                {% elif course.available_seats <= 5 %}
+                                    <span class="badge badge-warning">{{ course.available_seats }} / {{ course.max_seats }} left</span>
+                                {% else %}
+                                    <span class="badge badge-success">{{ course.available_seats }} / {{ course.max_seats }} open</span>
+                                {% endif %}
+                            </td>
+                            <td style="text-align: right; white-space: nowrap;">
+                                <a href="{{ url_for('courses.view_course', course_id=course.id) }}" class="btn btn-sm btn-outline" title="View Course Details">
+                                    Details
+                                </a>
+                                {% if course.available_seats > 0 %}
+                                    <a href="{{ url_for('courses.register', course_id=course.id) }}" class="btn btn-sm btn-primary" title="Enroll Student">
+                                        Enroll
+                                    </a>
+                                {% else %}
+                                    <button class="btn btn-sm btn-outline" disabled style="opacity: 0.5; cursor: not-allowed;">
+                                        Full
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 36px; color: var(--slate-500);">
+                            No courses found matching the search criteria.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
