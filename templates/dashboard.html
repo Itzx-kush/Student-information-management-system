@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — Week 8 Academic Lab{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2 class="page-title">Week 8 — Student Management & Git Workflow Lab</h2>
+        <p class="page-subtitle">A unified laboratory platform combining Student Information CRUD, Course Registration, and Git/GitHub Workflows.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('students.add_student') }}" class="btn btn-primary">
+            <span>+ Add Student</span>
+        </a>
+        <a href="{{ url_for('courses.register') }}" class="btn btn-indigo">
+            <span>Enroll in Course</span>
+        </a>
+    </div>
+</div>
+
+<!-- Key Metrics Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon blue">
+            <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+        </div>
+        <div>
+            <div class="stat-value">{{ total_students }}</div>
+            <div class="stat-label">Total Students</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon indigo">
+            <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+        </div>
+        <div>
+            <div class="stat-value">{{ total_courses }}</div>
+            <div class="stat-label">Offered Courses</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon green">
+            <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </div>
+        <div>
+            <div class="stat-value">{{ total_registrations }}</div>
+            <div class="stat-label">Active Registrations</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon orange">
+            <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+        </div>
+        <div>
+            <div class="stat-value">{{ available_courses_count }}</div>
+            <div class="stat-label">Available Courses</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Access: Three Practical Questions -->
+<h3 style="font-size: 1.2rem; font-weight: 700; color: var(--slate-800); margin-bottom: 16px;">
+    Week-8 Examination Practicals Quick Access
+</h3>
+
+<div class="practicals-quick-grid">
+    <!-- Question A -->
+    <div class="quick-practical-card q-a">
+        <span class="practical-tag blue">Question A</span>
+        <h3>Student Information & Git Branch Management</h3>
+        <p>
+            Complete student profile CRUD coupled with Git branch operations: creating, switching, listing, merging, and deleting feature branches.
+        </p>
+        <div style="display: flex; gap: 8px; margin-top: auto;">
+            <a href="{{ url_for('students.list_students') }}" class="btn btn-sm btn-outline">Students CRUD</a>
+            <a href="{{ url_for('git.branches') }}" class="btn btn-sm btn-primary">Branch Lab</a>
+        </div>
+    </div>
+
+    <!-- Question B -->
+    <div class="quick-practical-card q-b">
+        <span class="practical-tag indigo">Question B</span>
+        <h3>Student System with Git & GitHub Workflow</h3>
+        <p>
+            End-to-end repository lifecycle: remote cloning, file staging (`git add`), committing, remote tracking, and bidirectional push & pull operations.
+        </p>
+        <div style="display: flex; gap: 8px; margin-top: auto;">
+            <a href="{{ url_for('git.github_workflow') }}" class="btn btn-sm btn-indigo">GitHub Workflow</a>
+            <a href="{{ url_for('practicals.list_practicals') }}#practical-b" class="btn btn-sm btn-outline">Lab Sheet B</a>
+        </div>
+    </div>
+
+    <!-- Question C -->
+    <div class="quick-practical-card q-c">
+        <span class="practical-tag green">Question C</span>
+        <h3>Course Registration & Collaborative Git</h3>
+        <p>
+            Transactional student course enrollment, capacity enforcement, multi-developer branch simulation, pull requests, and merge conflict resolution.
+        </p>
+        <div style="display: flex; gap: 8px; margin-top: auto;">
+            <a href="{{ url_for('courses.list_courses') }}" class="btn btn-sm btn-success">Course Catalog</a>
+            <a href="{{ url_for('git.collaboration') }}" class="btn btn-sm btn-outline">Collaboration</a>
+        </div>
+    </div>
+</div>
+
+<!-- Activity Overview Grid -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 10px;">
+    <!-- Recent Registrations -->
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                </svg>
+                <span>Recent Course Registrations</span>
+            </h4>
+            <a href="{{ url_for('courses.list_registrations') }}" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Course</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if recent_registrations %}
+                        {% for reg in recent_registrations %}
+                            <tr>
+                                <td>
+                                    <strong><a href="{{ url_for('students.view_student', student_id=reg.student.id) }}">{{ reg.student.name }}</a></strong>
+                                    <div style="font-size: 0.8rem; color: var(--slate-500);">{{ reg.student.roll_number }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge badge-blue">{{ reg.course.course_code }}</span>
+                                    <span style="margin-left: 6px;">{{ reg.course.course_name }}</span>
+                                </td>
+                                <td>{{ reg.registration_date.strftime('%b %d, %Y') }}</td>
+                                <td>
+                                    {% if reg.status == 'Active' %}
+                                        <span class="badge badge-active">Active</span>
+                                    {% else %}
+                                        <span class="badge badge-cancelled">Cancelled</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--slate-500); padding: 24px;">
+                                No recent course registrations recorded yet.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Quick Navigation / System Info Card -->
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Lab Architecture</span>
+            </h4>
+        </div>
+        <div class="card-body" style="font-size: 0.9rem; line-height: 1.6;">
+            <p style="margin-bottom: 12px; color: var(--slate-600);">
+                This single Flask application satisfies all requirements of Week 8:
+            </p>
+            <ul style="margin-left: 20px; margin-bottom: 16px; color: var(--slate-700);">
+                <li><strong>Backend:</strong> Python 3.14 + Flask 3.1</li>
+                <li><strong>Database:</strong> SQLite persistent storage</li>
+                <li><strong>ORM:</strong> Flask-SQLAlchemy transactions</li>
+                <li><strong>VCS:</strong> Git Branching & GitHub Integration</li>
+            </ul>
+            <div style="border-top: 1px solid var(--slate-200); padding-top: 14px;">
+                <a href="{{ url_for('practicals.list_practicals') }}" class="btn btn-primary" style="width: 100%;">
+                    Open Week-8 Lab Reports
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

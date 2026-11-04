@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block title %}Week-8 Practical Demonstrations{% endblock %}
+{% block breadcrumb %}Examination / Practical Demonstrations{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2 class="page-title">Week-8 Practical Demonstrations</h2>
+        <p class="page-subtitle">Standard College Laboratory Examination Records for Practicals A, B, and C.</p>
+    </div>
+    <div class="page-actions">
+        <a href="#practical-a" class="btn btn-sm btn-outline">Practical A</a>
+        <a href="#practical-b" class="btn btn-sm btn-outline">Practical B</a>
+        <a href="#practical-c" class="btn btn-sm btn-outline">Practical C</a>
+    </div>
+</div>
+
+<!-- =========================================================================
+     PRACTICAL A
+     ========================================================================= -->
+<section id="practical-a" class="practical-section">
+    <div class="practical-badge-header">
+        <div>
+            <span class="practical-tag blue">Practical Question A</span>
+            <h3 class="practical-heading">Student Information Management System with Git Branch Management</h3>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <a href="{{ url_for('students.list_students') }}" class="btn btn-sm btn-primary">Open Student CRUD</a>
+            <a href="{{ url_for('git.branches') }}" class="btn btn-sm btn-indigo">Open Branch Lab</a>
+        </div>
+    </div>
+
+    <table class="lab-meta-table">
+        <tbody>
+            <tr>
+                <td class="label-cell">Aim</td>
+                <td>
+                    To develop a Student Information Management System using Flask, HTML5, and SQLite, and demonstrate essential Git branch management operations including branch creation, switching, listing, merging, and branch deletion.
+                </td>
+            </tr>
+            <tr>
+                <td class="label-cell">Software Requirements</td>
+                <td>
+                    Operating System: Windows 10/11 &bull; Language: Python 3.10+ &bull; Web Framework: Flask 3.1 &bull; Database: SQLite3 &bull; Version Control: Git 2.40+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--slate-900); margin: 20px 0 10px;">
+        Algorithm / Procedure:
+    </h4>
+    <ol class="procedure-steps">
+        <li><strong>Initialize Virtual Environment & Dependencies:</strong> Set up a local Python virtual environment (<code>python -m venv venv</code>) and install required libraries (Flask, Flask-SQLAlchemy).</li>
+        <li><strong>Implement Student Data Model:</strong> Define the <code>Student</code> schema in <code>models.py</code> with fields: <code>id</code>, <code>name</code>, <code>roll_number</code> (unique), <code>email</code> (unique), <code>phone</code>, <code>department</code>, <code>year_of_study</code>, <code>semester</code>, <code>gender</code>, <code>address</code>, and <code>admission_date</code>.</li>
+        <li><strong>Develop CRUD Routes:</strong> Implement routes for creating (<code>/students/add</code>), reading/filtering (<code>/students</code>), updating (<code>/students/&lt;id&gt;/edit</code>), and deleting (<code>/students/&lt;id&gt;/delete</code>) student records.</li>
+        <li><strong>Create Feature Branch:</strong> In the terminal, create an isolated feature branch:
+            <div class="command-row" style="margin: 8px 0;">
+                <span class="cmd-text">git branch feature-student</span>
+                <button type="button" class="btn-copy" data-clipboard-text="git branch feature-student">Copy</button>
+            </div>
+        </li>
+        <li><strong>Switch to Feature Branch:</strong> Check out the branch:
+            <div class="command-row" style="margin: 8px 0;">
+                <span class="cmd-text">git switch feature-student</span>
+                <button type="button" class="btn-copy" data-clipboard-text="git switch feature-student">Copy</button>
+            </div>
+        </li>
+        <li><strong>Develop and Commit Code:</strong> Implement student CRUD templates, stage changes with <code>git add .</code>, and commit with <code>git commit -m "Implement student CRUD features"</code>.</li>
+        <li><strong>Switch Back to Main Branch:</strong>
+            <div class="command-row" style="margin: 8px 0;">
+                <span class="cmd-text">git switch main</span>
+                <button type="button" class="btn-copy" data-clipboard-text="git switch main">Copy</button>
+            </div>
+        </li>
+        <li><strong>Merge Feature Branch:</strong> Integrate the student management feature into <code>main</code>:
+            <div class="command-row" style="margin: 8px 0;">
+                <span class="cmd-text">git merge feature-student</span>
+                <button type="button" class="btn-copy" data-clipboard-text="git merge feature-student">Copy</button>
+            </div>
+        </li>
+        <li><strong>Delete Merged Branch:</strong> Clean up the local branch pointer:
+            <div class="command-row" style="margin: 8px 0;">
+                <span class="cmd-text">git branch -d feature-student</span>
+                <button type="button" class="btn-copy" data-clipboard-text="git branch -d feature-student">Copy</button>
+            </div>
+        </li>
+    </ol>
+
+    <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--slate-900); margin: 20px 0 10px;">
+        Sample Terminal Output:
+    </h4>
+    <div class="terminal-card">
+        <div class="terminal-body" style="font-size: 0.82rem;">
+$ git branch feature-student
+$ git switch feature-student
+Switched to branch 'feature-student'
+$ git status
+On branch feature-student
+Changes to be committed:
+  modified:   models.py
+  new file:   routes/students.py
+$ git commit -m "Implement complete student CRUD operations"
+[feature-student c3d4e5f] Implement complete student CRUD operations
+ 3 files changed, 210 insertions(+)
+$ git switch main
+Switched to branch 'main'
+$ git merge feature-student
+Updating 3440577..c3d4e5f
+Fast-forward
+ models.py          | 65 ++++++++++++++++++++++
+ routes/students.py | 145 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 210 insertions(+)
+$ git branch -d feature-student
+Deleted branch feature-student (was c3d4e5f).
+        </div>
+    </div>
+
+    <div style="background: var(--success-50); border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 14px 18px; margin-top: 16px;">
+        <strong style="color: var(--success-700);">Result:</strong>
+        The Student Information Management System was successfully implemented in Flask with full CRUD operations and persistent SQLite storage. Git branch creation, switching, merging, and safe deletion were verified without regression on the main branch.
+    </div>
+</section>
+
+<!-- =========================================================================
+     PRACTICAL B
+     ========================================================================= -->
+<section id="practical-b" class="practical-section">
+    <div class="practical-badge-header">
+        <div>
+            <span class="practical-tag indigo">Practical Question B</span>
+            <h3 class="practical-heading">Student Information Management System with Git and GitHub Workflow</h3>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <a href="{{ url_for('students.list_students') }}" class="btn btn-sm btn-primary">Open Student CRUD</a>
+            <a href="{{ url_for('git.github_workflow') }}" class="btn btn-sm btn-indigo">Open GitHub Tutorial</a>
+        </div>
+    </div>
+
+    <table class="lab-meta-table">
+        <tbody>
+            <tr>
+                <td class="label-cell">Aim</td>
+                <td>
+                    To develop a basic Student Information Management System using Flask and demonstrate the complete Git and GitHub remote workflow: remote repository creation, cloning, file modification, staging, committing, remote configuration, and pushing/pulling updates.
+                </td>
+            </tr>
+            <tr>
+                <td class="label-cell">Repository URL</td>
+                <td>
+                    <code>https://github.com/Itzx-kush/Student-information-management-system.git</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--slate-900); margin: 20px 0 10px;">
+        Procedure:
+    </h4>
+    <ol class="procedure-steps">
+        <li><strong>Clone Remote Repository:</strong> Clone the central GitHub repository to the local machine:
+            <div class="command-row" style="margin: 8px 0;">
+                <span class="cmd-text">git clone https://github.com/Itzx-kush/Student-information-management-system.git</span>
+                <button type="button" class="btn-copy" data-clipboard-text="git clone https://github.com/Itzx-kush/Student-information-management-system.git">Copy</button>
+            </div>
+        </li>
+        <li><strong>Add Application Files:</strong> Create the Flask application files, directory structure, templates, CSS, and models.</li>
+        <li><strong>Verify Repository Status:</strong> Run <code>git status</code> to detect untracked and modified files.</li>
+        <li><strong>Stage Changes:</strong> Stage all files for the upcoming commit snapshot:
+            <div class="command-row" style="margin: 8px 0;">
+                <span class="cmd-text">git add .</span>
+                <button type="button" class="btn-copy" data-clipboard-text="git add .">Copy</button>
+            </div>
+        </li>
+        <li><strong>Commit Changes:</strong> Save snapshot with a descriptive commit message:
+            <div class="command-row" style="margin: 8px 0;">
+                <span class="cmd-text">git commit -m "Add student management system"</span>
+                <button type="button" class="btn-copy" data-clipboard-text="git commit -m &quot;Add student management system&quot;">Copy</button>
+            </div>
+        </li>
+        <li><strong>Inspect Remotes:</strong> Verify configured remotes:
+            <div class="command-row" style="margin: 8px 0;">
+                <span class="cmd-text">git remote -v</span>
+                <button type="button" class="btn-copy" data-clipboard-text="git remote -v">Copy</button>
+            </div>
+        </li>
+        <li><strong>Push to Remote Main:</strong> Publish commits to the GitHub repository:
+            <div class="command-row" style="margin: 8px 0;">
+                <span class="cmd-text">git push -u origin main</span>
+                <button type="button" class="btn-copy" data-clipboard-text="git push -u origin main">Copy</button>
+            </div>
+        </li>
+        <li><strong>Pull Remote Changes:</strong> Retrieve upstream team updates:
+            <div class="command-row" style="margin: 8px 0;">
+                <span class="cmd-text">git pull origin main</span>
+                <button type="button" class="btn-copy" data-clipboard-text="git pull origin main">Copy</button>
+            </div>
+        </li>
+    </ol>
+
+    <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--slate-900); margin: 20px 0 10px;">
+        Sample Execution Output:
+    </h4>
+    <div class="terminal-card">
+        <div class="terminal-body" style="font-size: 0.82rem;">
+$ git remote -v
+origin  https://github.com/Itzx-kush/Student-information-management-system.git (fetch)
+origin  https://github.com/Itzx-kush/Student-information-management-system.git (push)
+
+$ git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+nothing to commit, working tree clean
+
+$ git push -u origin main
+Enumerating objects: 24, done.
+Counting objects: 100% (24/24), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (20/20), done.
+Writing objects: 100% (24/24), 22.84 KiB | 2.85 MiB/s, done.
+To https://github.com/Itzx-kush/Student-information-management-system.git
+   3440577..a1b2c3d  main -> main
+Branch 'main' set up to track remote branch 'main' from 'origin'.
+        </div>
+    </div>
+
+    <div style="background: var(--success-50); border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 14px 18px; margin-top: 16px;">
+        <strong style="color: var(--success-700);">Result:</strong>
+        The complete Git and GitHub remote workflow was executed successfully. The Flask student management application was staged, committed, and synchronized with the remote GitHub repository at <code>Itzx-kush/Student-information-management-system</code>.
+    </div>
+</section>
+
+<!-- =========================================================================
+     PRACTICAL C
+     ========================================================================= -->
+<section id="practical-c" class="practical-section">
+    <div class="practical-badge-header">
+        <div>
+            <span class="practical-tag green">Practical Question C</span>
+            <h3 class="practical-heading">Online Student Course Registration System with Complete Git Workflow</h3>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <a href="{{ url_for('courses.list_courses') }}" class="btn btn-sm btn-success">Open Course Catalog</a>
+            <a href="{{ url_for('git.collaboration') }}" class="btn btn-sm btn-indigo">Open Collaboration Lab</a>
+        </div>
+    </div>
+
+    <table class="lab-meta-table">
+        <tbody>
+            <tr>
+                <td class="label-cell">Aim</td>
+                <td>
+                    To develop an Online Student Course Registration System using Flask with atomic seat capacity management, and demonstrate the complete collaborative Git workflow: repository initialization, file tracking, staging, commits, feature branching, merging, remote management, pull request reviews, and team integration.
+                </td>
+            </tr>
+            <tr>
+                <td class="label-cell">Key Features</td>
+                <td>
+                    Course catalog, seat decrementation upon registration, seat restoration upon cancellation, duplicate enrollment prevention, multi-developer branch simulation, and merge conflict resolution.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--slate-900); margin: 20px 0 10px;">
+        Procedure:
+    </h4>
+    <ol class="procedure-steps">
+        <li><strong>Define Course & Registration Models:</strong> Implement <code>Course</code> (code, name, department, credits, max_seats, available_seats, instructor) and <code>CourseRegistration</code> (student_id, course_id, status, registration_date) with foreign key relationships and unique constraints.</li>
+        <li><strong>Implement Transactional Enrollment Logic:</strong>
+            <ul>
+                <li>Verify student and course existence.</li>
+                <li>Verify student is not already actively registered in the selected course.</li>
+                <li>Verify <code>available_seats &gt; 0</code>; reject registration if zero.</li>
+                <li>Atomically create <code>CourseRegistration</code> and decrement <code>course.available_seats -= 1</code>.</li>
+                <li>Upon cancellation, set status to <code>Cancelled</code> and increment <code>course.available_seats += 1</code>.</li>
+            </ul>
+        </li>
+        <li><strong>Collaborative Branching Strategy (Developer 1 & Developer 2):</strong>
+            <ul>
+                <li><strong>Developer 1:</strong> Branches <code>feature-student-management</code>, commits student CRUD, and pushes branch.</li>
+                <li><strong>Developer 2:</strong> Branches <code>feature-course-registration</code>, commits course registration logic, and pushes branch.</li>
+                <li><strong>Team Lead:</strong> Reviews GitHub Pull Requests, tests code, resolves merge conflicts if any, and merges both feature branches into <code>main</code>.</li>
+            </ul>
+        </li>
+        <li><strong>Pull Request Lifecycle:</strong> Create a pull request targeting <code>main</code> with comprehensive release notes, automated test results, and peer review verification.</li>
+    </ol>
+
+    <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--slate-900); margin: 20px 0 10px;">
+        Integration Commands:
+    </h4>
+    <div class="terminal-card">
+        <div class="terminal-body" style="font-size: 0.82rem;">
+$ git switch -c feature-course-registration
+$ git add .
+$ git commit -m "Implement Online Course Registration with transactional seat counters"
+$ git push -u origin feature-course-registration
+$ git switch main
+$ git pull origin main
+$ git merge feature-course-registration
+$ git push origin main
+        </div>
+    </div>
+
+    <div style="background: var(--success-50); border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 14px 18px; margin-top: 16px;">
+        <strong style="color: var(--success-700);">Result:</strong>
+        The Online Student Course Registration System was developed with strict transactional integrity and capacity rules. The end-to-end Git collaboration lifecycle—incorporating feature branching, staging, atomic commits, pull request submission, and conflict resolution—was successfully demonstrated.
+    </div>
+</section>
+{% endblock %}

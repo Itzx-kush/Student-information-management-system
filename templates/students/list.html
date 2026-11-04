@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Student Information Management{% endblock %}
+{% block breadcrumb %}Students{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2 class="page-title">Student Information Management</h2>
+        <p class="page-subtitle">Module A & B (Practical A & B) — Complete Student CRUD with Unique Roll & Email Verification.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('students.add_student') }}" class="btn btn-primary">
+            <span>+ Add New Student</span>
+        </a>
+    </div>
+</div>
+
+<!-- Search & Filter Bar -->
+<form method="GET" action="{{ url_for('students.list_students') }}" class="filter-bar">
+    <div class="search-input-wrapper">
+        <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search by student name or roll number..."
+            value="{{ search_query }}"
+        >
+    </div>
+
+    <div style="min-width: 200px;">
+        <select name="department" class="form-control" onchange="this.form.submit()">
+            <option value="">All Departments</option>
+            {% for dept in departments %}
+                <option value="{{ dept }}" {% if dept_filter == dept %}selected{% endif %}>{{ dept }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-outline">
+        <span>Filter</span>
+    </button>
+
+    {% if search_query or dept_filter %}
+        <a href="{{ url_for('students.list_students') }}" class="btn btn-outline" style="color: var(--danger-600);">
+            Clear Filters
+        </a>
+    {% endif %}
+
+    <div style="margin-left: auto; font-size: 0.88rem; color: var(--slate-500);">
+        Showing <strong>{{ total_count }}</strong> student(s)
+    </div>
+</form>
+
+<!-- Students Table -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            <span>Registered Students Directory</span>
+        </h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Roll Number</th>
+                    <th>Department</th>
+                    <th>Semester</th>
+                    <th>Email</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if students %}
+                    {% for student in students %}
+                        <tr>
+                            <td><strong>#{{ student.id }}</strong></td>
+                            <td>
+                                <a href="{{ url_for('students.view_student', student_id=student.id) }}" style="font-weight: 600;">
+                                    {{ student.name }}
+                                </a>
+                                <div style="font-size: 0.78rem; color: var(--slate-500);">{{ student.year_of_study }}</div>
+                            </td>
+                            <td>
+                                <span class="badge badge-indigo">{{ student.roll_number }}</span>
+                            </td>
+                            <td>{{ student.department }}</td>
+                            <td>{{ student.semester }}</td>
+                            <td>
+                                <a href="mailto:{{ student.email }}" style="color: var(--slate-600);">{{ student.email }}</a>
+                            </td>
+                            <td style="text-align: right; white-space: nowrap;">
+                                <a href="{{ url_for('students.view_student', student_id=student.id) }}" class="btn btn-sm btn-outline" title="View Details">
+                                    View
+                                </a>
+                                <a href="{{ url_for('students.edit_student', student_id=student.id) }}" class="btn btn-sm btn-outline" title="Edit Student">
+                                    Edit
+                                </a>
+                                <form method="POST" action="{{ url_for('students.delete_student', student_id=student.id) }}" style="display: inline-block;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-danger btn-delete-confirm"
+                                        data-item-name="{{ student.name }} ({{ student.roll_number }})"
+                                        title="Delete Student"
+                                    >
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 36px; color: var(--slate-500);">
+                            No students match your query. Click "+ Add New Student" to create a new profile.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

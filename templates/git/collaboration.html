@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}Complete Git Workflow & Collaborative Development{% endblock %}
+{% block breadcrumb %}Git / Collaborative Development{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2 class="page-title">Collaborative Development & Complete Git Lifecycle</h2>
+        <p class="page-subtitle">Module E (Practical C) — Multi-Developer Branching, Pull Requests, Merge Conflict Resolution, and Concept Mastery Checklist.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('practicals.list_practicals') }}#practical-c" class="btn btn-outline">
+            View Lab Sheet C &rarr;
+        </a>
+    </div>
+</div>
+
+<!-- Interactive Student Git Mastery Checklist -->
+<div class="checklist-container" style="margin-bottom: 28px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900);">
+                Student Git Competency Checklist
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--slate-500);">
+                Track and record your mastery of Git commands required for Week 8 examinations.
+            </p>
+        </div>
+        <div>
+            <span style="font-size: 0.9rem; font-weight: 600; color: var(--slate-700);">
+                Progress: <span id="checklistCompletedCount">{{ completed_count }}</span> / {{ total_items }} completed (<span id="checklistProgressPct">{{ progress_percentage }}%</span>)
+            </span>
+        </div>
+    </div>
+
+    <div class="progress-bar-wrapper">
+        <div class="progress-bar-fill" id="checklistProgressFill" style="width: {{ progress_percentage }}%;"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px;">
+        {% for item in checklist_items %}
+            <div class="checklist-item">
+                <label class="checklist-label" for="chk_{{ item.id }}">
+                    <input
+                        type="checkbox"
+                        id="chk_{{ item.id }}"
+                        class="checklist-checkbox"
+                        data-item-id="{{ item.id }}"
+                        {% if checklist_status.get(item.id) %}checked{% endif %}
+                    >
+                    <span>{{ item.label }}</span>
+                </label>
+                <span class="badge badge-blue" style="font-size: 0.72rem;">{{ item.module }}</span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Collaborative Simulation: Developer 1 vs Developer 2 -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            <span>Real-World Scenario: Parallel Multi-Developer Workflow</span>
+        </h3>
+    </div>
+    <div class="card-body">
+        <p style="font-size: 0.92rem; color: var(--slate-700); margin-bottom: 20px; line-height: 1.6;">
+            In collaborative software engineering, multiple teammates work simultaneously on independent features. Rather than committing straight to <code>main</code>, each developer forks or branches from <code>main</code>, commits changes incrementally, and submits a <strong>Pull Request (PR)</strong> for peer review.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+            <!-- Developer 1 Card -->
+            <div style="background: var(--slate-50); border: 2px solid var(--primary-200); border-radius: var(--radius-sm); padding: 20px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <h4 style="color: var(--primary-800); font-weight: 700;">Developer 1: Student Management</h4>
+                    <span class="badge badge-blue">Feature Branch A</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--slate-600); margin-bottom: 12px;">
+                    Implements models, routes, and views for student CRUD records:
+                </p>
+                <div class="terminal-card" style="margin: 0;">
+                    <div class="terminal-body" style="font-size: 0.8rem; padding: 12px;">
+<span style="color: #94a3b8;"># 1. Clone repository</span>
+<span style="color: #38bdf8;">git clone https://github.com/Itzx-kush/Student-information-management-system.git</span>
+
+<span style="color: #94a3b8;"># 2. Create and switch to feature branch</span>
+<span style="color: #38bdf8;">git switch -c feature-student-management</span>
+
+<span style="color: #94a3b8;"># 3. Stage and commit student CRUD files</span>
+<span style="color: #38bdf8;">git add .</span>
+<span style="color: #38bdf8;">git commit -m "Implement student management CRUD"</span>
+
+<span style="color: #94a3b8;"># 4. Push feature branch to GitHub</span>
+<span style="color: #38bdf8;">git push -u origin feature-student-management</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Developer 2 Card -->
+            <div style="background: var(--slate-50); border: 2px solid var(--indigo-200); border-radius: var(--radius-sm); padding: 20px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <h4 style="color: var(--indigo-900); font-weight: 700;">Developer 2: Course Registration</h4>
+                    <span class="badge badge-indigo">Feature Branch B</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--slate-600); margin-bottom: 12px;">
+                    Implements course catalogs, seat capacity logic, and registration:
+                </p>
+                <div class="terminal-card" style="margin: 0;">
+                    <div class="terminal-body" style="font-size: 0.8rem; padding: 12px;">
+<span style="color: #94a3b8;"># 1. Clone repository</span>
+<span style="color: #38bdf8;">git clone https://github.com/Itzx-kush/Student-information-management-system.git</span>
+
+<span style="color: #94a3b8;"># 2. Create and switch to feature branch</span>
+<span style="color: #38bdf8;">git switch -c feature-course-registration</span>
+
+<span style="color: #94a3b8;"># 3. Stage and commit course catalog files</span>
+<span style="color: #38bdf8;">git add .</span>
+<span style="color: #38bdf8;">git commit -m "Implement course registration system"</span>
+
+<span style="color: #94a3b8;"># 4. Push feature branch to GitHub</span>
+<span style="color: #38bdf8;">git push -u origin feature-course-registration</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Integration Workflow -->
+        <div style="background: #f0fdf4; border: 2px solid #86efac; border-radius: var(--radius-sm); padding: 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <h4 style="color: #166534; font-weight: 700;">Integration & Pull Request Workflow on Main</h4>
+                <span class="badge badge-success">Production Integration</span>
+            </div>
+            <p style="font-size: 0.88rem; color: #166534; margin-bottom: 12px;">
+                The release lead synchronizes <code>main</code>, tests peer pull requests, merges approved contributions, and pushes the consolidated application:
+            </p>
+            <div class="terminal-card" style="margin: 0;">
+                <div class="terminal-body" style="font-size: 0.82rem; padding: 14px;">
+<span style="color: #94a3b8;"># Ensure local main is up to date with remote</span>
+<span style="color: #38bdf8;">git switch main</span>
+<span style="color: #38bdf8;">git pull origin main</span>
+
+<span style="color: #94a3b8;"># Integrate Developer 1's work</span>
+<span style="color: #38bdf8;">git merge feature-student-management</span>
+
+<span style="color: #94a3b8;"># Integrate Developer 2's work</span>
+<span style="color: #38bdf8;">git merge feature-course-registration</span>
+
+<span style="color: #94a3b8;"># Push integrated application to GitHub main</span>
+<span style="color: #38bdf8;">git push origin main</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Merge Conflicts Tutorial -->
+<div class="card" style="margin-top: 28px;">
+    <div class="card-header">
+        <h3 class="card-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <span>Understanding & Resolving Merge Conflicts</span>
+        </h3>
+    </div>
+    <div class="card-body">
+        <div style="font-size: 0.92rem; color: var(--slate-700); line-height: 1.6; margin-bottom: 18px;">
+            <p><strong>What is a Merge Conflict?</strong> A merge conflict occurs when two branches have modified the exact same lines of code in a file differently, or one branch deleted a file while another modified it. Because Git cannot deduce author intent automatically, it pauses the merge and places conflict markers directly inside the affected files.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--slate-800); margin-bottom: 8px;">
+                    1. Git Conflict Markers in Source Code
+                </h4>
+                <div class="terminal-card" style="margin: 0;">
+                    <div class="terminal-body" style="font-size: 0.8rem; padding: 12px;">
+<span style="color: #ef4444;">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD (Current branch / main)</span>
+<span style="color: #f1f5f9;">DATABASE_NAME = "student_management.db"</span>
+<span style="color: #eab308;">=======</span>
+<span style="color: #f1f5f9;">DATABASE_NAME = "student_records_v2.db"</span>
+<span style="color: #3b82f6;">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature-course-registration</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--slate-800); margin-bottom: 8px;">
+                    2. Three-Step Resolution Procedure
+                </h4>
+                <ol style="margin-left: 20px; font-size: 0.88rem; color: var(--slate-700); line-height: 1.6;">
+                    <li><strong>Edit the file:</strong> Open the file, choose the correct consolidated code, and remove the marker lines (<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>).</li>
+                    <li><strong>Stage the resolved file:</strong> Run <code>git add &lt;filename&gt;</code> to notify Git the conflict is solved.</li>
+                    <li><strong>Complete the merge commit:</strong> Run <code>git commit -m "Resolve merge conflict between main and feature"</code>.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

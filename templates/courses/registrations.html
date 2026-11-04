@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Course Registrations Audit{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('courses.list_courses') }}">Courses</a> / Registrations Roster{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2 class="page-title">Course Registrations Master Roster</h2>
+        <p class="page-subtitle">Complete ledger of active and dropped course registrations with transactional seat management.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('courses.register') }}" class="btn btn-primary">
+            <span>+ Enroll Student</span>
+        </a>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<form method="GET" action="{{ url_for('courses.list_registrations') }}" class="filter-bar">
+    <div style="min-width: 200px;">
+        <select name="status" class="form-control" onchange="this.form.submit()">
+            <option value="">All Statuses</option>
+            <option value="Active" {% if status_filter == 'Active' %}selected{% endif %}>Active Only</option>
+            <option value="Cancelled" {% if status_filter == 'Cancelled' %}selected{% endif %}>Cancelled / Dropped</option>
+        </select>
+    </div>
+
+    <div style="min-width: 250px;">
+        <select name="course_id" class="form-control" onchange="this.form.submit()">
+            <option value="">All Courses</option>
+            {% for c in courses %}
+                <option value="{{ c.id }}" {% if course_filter == c.id %}selected{% endif %}>
+                    {{ c.course_code }}: {{ c.course_name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-outline">Filter</button>
+
+    {% if status_filter or course_filter %}
+        <a href="{{ url_for('courses.list_registrations') }}" class="btn btn-outline" style="color: var(--danger-600);">
+            Clear
+        </a>
+    {% endif %}
+
+    <div style="margin-left: auto; font-size: 0.88rem; color: var(--slate-500);">
+        Total: <strong>{{ registrations|length }}</strong> registration record(s)
+    </div>
+</form>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>Registration Ledger</span>
+        </h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Reg #</th>
+                    <th>Student Name</th>
+                    <th>Roll Number</th>
+                    <th>Course</th>
+                    <th>Registration Date</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if registrations %}
+                    {% for reg in registrations %}
+                        <tr>
+                            <td><strong>#{{ reg.id }}</strong></td>
+                            <td>
+                                <strong>
+                                    <a href="{{ url_for('students.view_student', student_id=reg.student.id) }}">
+                                        {{ reg.student.name }}
+                                    </a>
+                                </strong>
+                            </td>
+                            <td><span class="badge badge-indigo">{{ reg.student.roll_number }}</span></td>
+                            <td>
+                                <a href="{{ url_for('courses.view_course', course_id=reg.course.id) }}">
+                                    <span class="badge badge-blue">{{ reg.course.course_code }}</span>
+                                    <span style="margin-left: 6px;">{{ reg.course.course_name }}</span>
+                                </a>
+                            </td>
+                            <td>{{ reg.registration_date.strftime('%b %d, %Y %H:%M') }}</td>
+                            <td>
+                                {% if reg.status == 'Active' %}
+                                    <span class="badge badge-active">Active</span>
+                                {% else %}
+                                    <span class="badge badge-cancelled">Cancelled</span>
+                                {% endif %}
+                            </td>
+                            <td style="text-align: right;">
+                                {% if reg.status == 'Active' %}
+                                    <form method="POST" action="{{ url_for('courses.cancel_registration', reg_id=reg.id) }}" style="display: inline-block;">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Cancel this course registration? The seat will be restored automatically.')"
+                                        >
+                                            Cancel Registration
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span style="font-size: 0.8rem; color: var(--slate-400);">Inactive</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 36px; color: var(--slate-500);">
+                            No course registrations found.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

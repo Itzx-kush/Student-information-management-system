@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}About & Help{% endblock %}
+{% block breadcrumb %}About / Help{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2 class="page-title">About & Technical Documentation</h2>
+        <p class="page-subtitle">Architecture overview, installation instructions, database schemas, and laboratory quick start.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ repo_url }}" target="_blank" rel="noopener" class="btn btn-primary">
+            GitHub Repository &rarr;
+        </a>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+    <div>
+        <!-- Architecture Card -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
+                    <span>System Architecture</span>
+                </h3>
+            </div>
+            <div class="card-body" style="font-size: 0.92rem; color: var(--slate-700); line-height: 1.6;">
+                <p style="margin-bottom: 12px;">
+                    This application consolidates three Week-8 practical questions into a single cohesive Flask web application:
+                </p>
+                <ul style="margin-left: 20px; margin-bottom: 16px;">
+                    <li><strong>Question A (Module A & C):</strong> Student Information Management System CRUD and Git Branch Management (branch creation, checkout, merging, and safe deletion).</li>
+                    <li><strong>Question B (Module A & D):</strong> Student Information Management System with the standard Git & GitHub remote workflow (clone, status, add, commit, push, pull).</li>
+                    <li><strong>Question C (Module B & E):</strong> Online Student Course Registration System with atomic seat decrement/restore and collaborative Git workflows (team feature branches, pull requests, merge conflict resolution).</li>
+                </ul>
+
+                <h4 style="font-size: 1rem; font-weight: 700; color: var(--slate-900); margin: 16px 0 8px;">
+                    Local Windows Execution
+                </h4>
+                <div class="terminal-card" style="margin: 0;">
+                    <div class="terminal-body" style="font-size: 0.82rem; padding: 14px;">
+<span style="color: #94a3b8;"># 1. Clone repository</span>
+<span style="color: #38bdf8;">git clone https://github.com/Itzx-kush/Student-information-management-system.git</span>
+<span style="color: #38bdf8;">cd Student-information-management-system</span>
+
+<span style="color: #94a3b8;"># 2. Create and activate virtual environment</span>
+<span style="color: #38bdf8;">python -m venv venv</span>
+<span style="color: #38bdf8;">venv\Scripts\activate</span>
+
+<span style="color: #94a3b8;"># 3. Install dependencies</span>
+<span style="color: #38bdf8;">pip install -r requirements.txt</span>
+
+<span style="color: #94a3b8;"># 4. Start Flask application</span>
+<span style="color: #38bdf8;">python app.py</span>
+
+<span style="color: #94a3b8;"># Access in browser at: http://127.0.0.1:5000</span>
+<span style="color: #94a3b8;"># To stop the server: Press Ctrl + C in the terminal window</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Model Schema -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
+                    </svg>
+                    <span>Relational Database Architecture (SQLite)</span>
+                </h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Table Name</th>
+                            <th>Primary Key</th>
+                            <th>Unique Constraints</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>students</code></td>
+                            <td><code>id</code></td>
+                            <td><code>roll_number</code>, <code>email</code></td>
+                            <td>Stores student academic profiles, contact details, and department allocation.</td>
+                        </tr>
+                        <tr>
+                            <td><code>courses</code></td>
+                            <td><code>id</code></td>
+                            <td><code>course_code</code></td>
+                            <td>Defines academic course catalog, credits, instructors, and seat capacity.</td>
+                        </tr>
+                        <tr>
+                            <td><code>course_registrations</code></td>
+                            <td><code>id</code></td>
+                            <td><code>(student_id, course_id)</code></td>
+                            <td>Tracks student enrollments, statuses (Active/Cancelled), and timestamps.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Technical Highlights -->
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Security & Integrity</h4>
+            </div>
+            <div class="card-body" style="font-size: 0.88rem; line-height: 1.6; color: var(--slate-700);">
+                <p><strong>CSRF Security:</strong> All state-changing POST requests require a valid cryptographic CSRF token in session.</p>
+                <p style="margin-top: 10px;"><strong>No Shell Execution:</strong> Git subprocess calls utilize <code>shell=False</code> with strict argument lists to prevent command injection.</p>
+                <p style="margin-top: 10px;"><strong>Branch Protection:</strong> Deletion of the primary <code>main</code> or <code>master</code> branch is hard-blocked.</p>
+                <p style="margin-top: 10px;"><strong>Atomic Transactions:</strong> Course registration and seat adjustments are executed inside atomic SQLite transactions.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Laboratory Evaluation</h4>
+            </div>
+            <div class="card-body" style="font-size: 0.88rem; line-height: 1.6; color: var(--slate-700);">
+                <p>This repository conforms to university laboratory evaluation guidelines, featuring:</p>
+                <ul style="margin-left: 18px; margin-top: 8px;">
+                    <li>Formatted Lab Sheets (Aim, Procedure, Result)</li>
+                    <li>Interactive Git Branch Practical Panel</li>
+                    <li>GitHub Remote Step-by-Step Guide</li>
+                    <li>Automated Pytest Test Suite</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

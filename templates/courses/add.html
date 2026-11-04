@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Course{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('courses.list_courses') }}">Courses</a> / Add Course{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2 class="page-title">Add New Course</h2>
+        <p class="page-subtitle">Define a new course offering with seat capacity and department allocation.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('courses.list_courses') }}" class="btn btn-outline">
+            &larr; Back to Catalog
+        </a>
+    </div>
+</div>
+
+<div class="card" style="max-width: 850px; margin: 0 auto;">
+    <div class="card-header">
+        <h3 class="card-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+            </svg>
+            <span>Course Definition Form</span>
+        </h3>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('courses.add_course') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <div class="form-grid">
+                <!-- Course Code -->
+                <div class="form-group">
+                    <label class="form-label" for="course_code">Course Code <span class="required">*</span></label>
+                    <input
+                        type="text"
+                        id="course_code"
+                        name="course_code"
+                        class="form-control"
+                        placeholder="e.g. CS201"
+                        value="{{ form_data.get('course_code', '') }}"
+                        required
+                    >
+                    <div class="form-help">Unique catalog identifier (e.g., CS101, EC201).</div>
+                </div>
+
+                <!-- Course Name -->
+                <div class="form-group">
+                    <label class="form-label" for="course_name">Course Title <span class="required">*</span></label>
+                    <input
+                        type="text"
+                        id="course_name"
+                        name="course_name"
+                        class="form-control"
+                        placeholder="e.g. Operating Systems & System Programming"
+                        value="{{ form_data.get('course_name', '') }}"
+                        required
+                    >
+                </div>
+
+                <!-- Department -->
+                <div class="form-group">
+                    <label class="form-label" for="department">Department <span class="required">*</span></label>
+                    <select id="department" name="department" class="form-control" required>
+                        <option value="">Select Department...</option>
+                        {% for dept in ['Computer Science', 'Information Technology', 'Artificial Intelligence', 'Electronics', 'Mechanical', 'Civil'] %}
+                            <option value="{{ dept }}" {% if form_data.get('department') == dept %}selected{% endif %}>{{ dept }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Instructor Name -->
+                <div class="form-group">
+                    <label class="form-label" for="instructor">Instructor Name <span class="required">*</span></label>
+                    <input
+                        type="text"
+                        id="instructor"
+                        name="instructor"
+                        class="form-control"
+                        placeholder="e.g. Dr. Satish Kumar"
+                        value="{{ form_data.get('instructor', '') }}"
+                        required
+                    >
+                </div>
+
+                <!-- Credits -->
+                <div class="form-group">
+                    <label class="form-label" for="credits">Credits (1 - 10) <span class="required">*</span></label>
+                    <input
+                        type="number"
+                        id="credits"
+                        name="credits"
+                        class="form-control"
+                        min="1"
+                        max="10"
+                        value="{{ form_data.get('credits', '3') }}"
+                        required
+                    >
+                </div>
+
+                <!-- Maximum Seats -->
+                <div class="form-group">
+                    <label class="form-label" for="max_seats">Maximum Seat Capacity <span class="required">*</span></label>
+                    <input
+                        type="number"
+                        id="max_seats"
+                        name="max_seats"
+                        class="form-control"
+                        min="1"
+                        max="500"
+                        value="{{ form_data.get('max_seats', '40') }}"
+                        required
+                    >
+                    <div class="form-help">Available seats will initially match maximum seats.</div>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group full-width">
+                    <label class="form-label" for="description">Course Description & Syllabus Summary</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        class="form-control"
+                        placeholder="Brief overview of course prerequisites, topics, and laboratory syllabus..."
+                    >{{ form_data.get('description', '') }}</textarea>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--slate-200);">
+                <a href="{{ url_for('courses.list_courses') }}" class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn btn-primary">Create Course</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

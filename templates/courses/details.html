@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.course_code }} — {{ course.course_name }}{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('courses.list_courses') }}">Courses</a> / {{ course.course_code }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2 class="page-title">{{ course.course_code }}: {{ course.course_name }}</h2>
+        <p class="page-subtitle">Department of {{ course.department }} &bull; Instructor: {{ course.instructor }}</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('courses.list_courses') }}" class="btn btn-outline">
+            &larr; Back to Catalog
+        </a>
+        {% if course.available_seats > 0 %}
+            <a href="{{ url_for('courses.register', course_id=course.id) }}" class="btn btn-primary">
+                + Register Student
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Course Overview Stats -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon blue">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+        </div>
+        <div>
+            <div class="stat-value">{{ course.credits }}</div>
+            <div class="stat-label">Credits</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon indigo">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+        </div>
+        <div>
+            <div class="stat-value">{{ course.max_seats }}</div>
+            <div class="stat-label">Total Capacity</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon green">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </div>
+        <div>
+            <div class="stat-value">{{ active_registrations|length }}</div>
+            <div class="stat-label">Enrolled Students</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon {% if course.available_seats <= 0 %}orange{% else %}blue{% endif %}">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+        </div>
+        <div>
+            <div class="stat-value">{{ course.available_seats }}</div>
+            <div class="stat-label">Available Seats</div>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+    <!-- Enrolled Students Roster -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                <span>Enrolled Students Roster (Active: {{ active_registrations|length }})</span>
+            </h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Student Name</th>
+                        <th>Department</th>
+                        <th>Enrolled On</th>
+                        <th style="text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if active_registrations %}
+                        {% for reg in active_registrations %}
+                            <tr>
+                                <td>
+                                    <span class="badge badge-indigo">{{ reg.student.roll_number }}</span>
+                                </td>
+                                <td>
+                                    <strong>
+                                        <a href="{{ url_for('students.view_student', student_id=reg.student.id) }}">
+                                            {{ reg.student.name }}
+                                        </a>
+                                    </strong>
+                                    <div style="font-size: 0.78rem; color: var(--slate-500);">{{ reg.student.email }}</div>
+                                </td>
+                                <td>{{ reg.student.department }}</td>
+                                <td>{{ reg.registration_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td style="text-align: right;">
+                                    <form method="POST" action="{{ url_for('courses.cancel_registration', reg_id=reg.id) }}" style="display: inline-block;">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Cancel registration for {{ reg.student.name }}? A seat will be released.')"
+                                        >
+                                            Drop
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 32px; color: var(--slate-500);">
+                                No students currently enrolled in this course.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Quick Enroll Sidebar & Course Metadata -->
+    <div>
+        <!-- Quick Enroll Form -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                    </svg>
+                    <span>Quick Enrollment</span>
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if course.available_seats > 0 %}
+                    <form method="POST" action="{{ url_for('courses.register') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="course_id" value="{{ course.id }}">
+
+                        <div class="form-group">
+                            <label class="form-label" for="quick_student_id">Select Student</label>
+                            <select id="quick_student_id" name="student_id" class="form-control" required>
+                                <option value="">Choose Student...</option>
+                                {% for s in all_students %}
+                                    <option value="{{ s.id }}">{{ s.name }} ({{ s.roll_number }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            Enroll into {{ course.course_code }}
+                        </button>
+                    </form>
+                {% else %}
+                    <div style="text-align: center; padding: 16px;">
+                        <span class="badge badge-danger" style="font-size: 0.85rem; padding: 6px 14px;">Course Full (0 Seats Left)</span>
+                        <p style="font-size: 0.85rem; color: var(--slate-500); margin-top: 10px;">
+                            New registrations cannot be accepted until an existing enrollment is dropped.
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Course Description Card -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Course Description</h4>
+            </div>
+            <div class="card-body" style="font-size: 0.92rem; color: var(--slate-600); line-height: 1.6;">
+                <p>{{ course.description or 'No syllabus description provided for this course.' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

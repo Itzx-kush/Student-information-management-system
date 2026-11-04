@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Course Registration Portal{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('courses.list_courses') }}">Courses</a> / Registration{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2 class="page-title">Online Student Course Registration</h2>
+        <p class="page-subtitle">Module B (Practical C) — Register a student into an academic course with atomic seat allocation.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('courses.list_registrations') }}" class="btn btn-outline">
+            View All Registrations &rarr;
+        </a>
+    </div>
+</div>
+
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <div class="card-header">
+        <h3 class="card-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+            </svg>
+            <span>Course Registration Form</span>
+        </h3>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('courses.register') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <div class="form-group">
+                <label class="form-label" for="student_id_select">Select Student <span class="required">*</span></label>
+                <select id="student_id_select" name="student_id" class="form-control" required>
+                    <option value="">-- Choose a Student --</option>
+                    {% for student in students %}
+                        <option value="{{ student.id }}" {% if selected_student_id == student.id %}selected{% endif %}>
+                            {{ student.name }} ({{ student.roll_number }}) &mdash; {{ student.department }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <div class="form-help">Only valid, registered students can be enrolled.</div>
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label class="form-label" for="course_id_select">Select Course <span class="required">*</span></label>
+                <select id="course_id_select" name="course_id" class="form-control" required>
+                    <option value="">-- Choose a Course --</option>
+                    {% for course in courses %}
+                        <option
+                            value="{{ course.id }}"
+                            data-seats="{{ course.available_seats }}"
+                            data-max="{{ course.max_seats }}"
+                            {% if selected_course_id == course.id %}selected{% endif %}
+                            {% if course.available_seats <= 0 %}disabled style="color: #94a3b8;"{% endif %}
+                        >
+                            {{ course.course_code }}: {{ course.course_name }} ({{ course.available_seats }}/{{ course.max_seats }} seats available)
+                        </option>
+                    {% endfor %}
+                </select>
+                <div id="seatIndicator" style="margin-top: 8px;"></div>
+            </div>
+
+            <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-sm); padding: 16px; margin: 24px 0;">
+                <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--slate-800); margin-bottom: 6px;">
+                    Transactional Constraints Enforced:
+                </h4>
+                <ul style="font-size: 0.85rem; color: var(--slate-600); margin-left: 20px; line-height: 1.5;">
+                    <li>Duplicate registrations for the same active student-course pair are rejected.</li>
+                    <li>Registrations are blocked when available seats equal zero.</li>
+                    <li>Successful registration atomically decrements seat capacity.</li>
+                    <li>Cancellation automatically restores available capacity.</li>
+                </ul>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                <a href="{{ url_for('courses.list_courses') }}" class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn btn-primary">Confirm Registration</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
